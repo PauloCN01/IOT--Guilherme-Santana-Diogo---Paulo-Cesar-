@@ -105,27 +105,34 @@
         // total de vagas configurado para 1 (aparece apenas 1 por vez)
         const totalVagas = 1;
 
-        // valor padrão desejado (variável "valor" = 10)
+        // valor padrão desejado
         const valorPadrao = 1;
 
         // extrai o segmento "valor" da URL /teste/valor
         const parts = location.pathname.split('/').filter(Boolean);
         let valor = valorPadrao;
-        let nOcupadas = 0;
-        if(valor > 5) nOcupadas = 1;
         if (parts[0] === 'teste' && parts[1]) {
             const n = parseInt(parts[1], 10);
             if (!isNaN(n)) valor = n;
         } else {
-            // força a URL para /teste/10 se não estiver nesse formato
+            // força a URL para /teste/<valorPadrao> se não estiver nesse formato
             const newPath = '/teste/' + valorPadrao;
             history.replaceState(null, '', newPath);
         }
 
-        // normaliza valores entre 0 e totalVagas
-        const ocupadas = nOcupadas;
+        // determina número de vagas ocupadas com base em `valor`
+        // aqui mantemos a regra original: se valor > 5 então 1 vaga ocupada, caso contrário 0
+        let ocupadas = 0;
+        if (valor > 5) {
+            ocupadas = 1;
+        } else {
+            ocupadas = 0;
+        }
+
+        // garante limites válidos (entre 0 e totalVagas)
+        ocupadas = Math.max(0, Math.min(ocupadas, totalVagas));
         const livres = totalVagas - ocupadas;
-        const percentual = Math.round((ocupadas / totalVagas) * 100);
+        const percentual = totalVagas > 0 ? Math.round((ocupadas / totalVagas) * 100) : 0;
 
         // atualiza os cartões (ordem: livre, ocupada, percentual)
         const cartoes = document.querySelectorAll('.cartoes-resumo .cartao .contagem');
