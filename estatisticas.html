@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - IOT</title>
-    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="/index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -18,8 +18,8 @@
         <nav class="barra-navegacao">
             <div class="logo">Controle de Estacionamento</div>
             <ul class="links-navegacao">
-                <li><a href="index.html">Dashboard</a></li>
-                <li><a href="estatisticas.html" class="ativo">Estatísticas</a></li>
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/estatisticas.html" class="ativo">Estatísticas</a></li>
             </ul>
             <div class="status-sistema">
                 Sistema: <span>Ligado/Desligado</span>
@@ -49,21 +49,56 @@
     <script>
     (function () {
         const valorPadrao = 1;
-        const parts = location.pathname.split('/').filter(Boolean);
-        let valor = valorPadrao;
-        if (parts[0] === 'teste' && parts[1]) {
-            const n = parseInt(parts[1], 10);
-            if (!isNaN(n)) valor = n;
-        } else {
-            const newPath = '/teste/' + valorPadrao;
-            history.replaceState(null, '', newPath);
+
+        function getValorFromUrl() {
+            // 1) tentar extrair da rota /teste/:n
+            const parts = location.pathname.split('/').filter(Boolean);
+            if (parts[0] === 'teste' && parts[1]) {
+                const n = parseInt(parts[1], 10);
+                if (!isNaN(n)) return n;
+            }
+
+            // 2) tentar query string ?sensor= or ?valor=
+            try {
+                const params = new URLSearchParams(location.search);
+                const q = params.get('sensor') || params.get('valor') || params.get('v');
+                if (q) {
+                    const n = parseInt(q, 10);
+                    if (!isNaN(n)) return n;
+                }
+            } catch (e) {
+                // ignorar
+            }
+
+            // 3) tentar hash (#/teste/6 ou #teste/6)
+            if (location.hash) {
+                const hashParts = location.hash.replace(/^#/, '').split('/').filter(Boolean);
+                if (hashParts[0] === 'teste' && hashParts[1]) {
+                    const n = parseInt(hashParts[1], 10);
+                    if (!isNaN(n)) return n;
+                }
+            }
+
+            // fallback
+            return valorPadrao;
         }
 
-        const el = document.getElementById('valor-recebido');
-        if (el) el.textContent = String(valor);
+        function updateDisplay() {
+            const valor = getValorFromUrl();
+            const el = document.getElementById('valor-recebido');
+            if (el) el.textContent = String(valor);
+        }
+
+        // atualizar agora
+        updateDisplay();
+
+        // reagir quando o usuário navegar no histórico (back/forward) ou quando outra parte da app alterar o history
+        window.addEventListener('popstate', updateDisplay);
+
+        // opcional: observar mudanças no hash
+        window.addEventListener('hashchange', updateDisplay);
     })();
     </script>
 
 </body>
 </html>
-// ...existing code...

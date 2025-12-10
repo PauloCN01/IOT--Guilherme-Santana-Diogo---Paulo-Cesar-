@@ -121,9 +121,9 @@
         }
 
         // determina número de vagas ocupadas com base em `valor`
-        // aqui mantemos a regra original: se valor > 5 então 1 vaga ocupada, caso contrário 0
+        // nova regra: se valor < 5 então 1 vaga ocupada, caso contrário 0
         let ocupadas = 0;
-        if (valor > 5) {
+        if (valor < 5) {
             ocupadas = 1;
         } else {
             ocupadas = 0;
@@ -154,7 +154,7 @@
         const vaga = document.querySelector('.vaga-estacionamento');
         if (vaga) {
             const status = vaga.querySelector('.status-vaga');
-            if (valor > 5) {
+            if (valor < 5) {
                 vaga.classList.remove('livre');
                 vaga.classList.add('ocupada');
                 if (status) status.textContent = 'Ocupada';
