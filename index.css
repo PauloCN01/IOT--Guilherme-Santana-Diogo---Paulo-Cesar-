@@ -1,0 +1,289 @@
+/*CONFIGURAÇÃO CORES*/
+
+:root {
+  --primary: #7A8794;     
+  --accent: #E0D83D;      
+  --neutral: #989892;     
+  --bg-light: #FFFFFF;    
+  --text-light: #FFFFFF;  
+  --text-dark: #333333;   
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+.conteudo {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+h1, h2 {
+  color: var(--primary);
+  margin-bottom: 15px;
+}
+
+h1 {
+  font-size: 2.2rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+  border-bottom: 2px solid var(--neutral);
+  padding-bottom: 5px;
+}
+
+/* BARRA DE NAVEGAÇÃO*/
+
+.barra-navegacao {
+  background-color: var(--primary);
+  color: var(--text-light);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent); 
+}
+
+
+.links-navegacao {
+  list-style: none;
+  display: flex;
+}
+
+
+.links-navegacao li {
+  margin-left: 25px;
+}
+
+
+.links-navegacao a {
+  text-decoration: none;
+  color: var(--text-light);
+  font-weight: 500;
+  padding-bottom: 5px;
+  transition: color 0.3s ease, border-bottom 0.3s ease;
+}
+
+.links-navegacao a:hover,
+.links-navegacao a.ativo {
+  color: var(--accent);
+  border-bottom: 2px solid var(--accent);
+}
+
+
+.status-sistema {
+  font-size: 0.9rem;
+}
+
+
+.status-sistema span {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/*CARTÕES DE RESUMO*/
+
+
+.cartoes-resumo {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 20px;
+  margin: 30px 0;
+}
+
+
+.cartao {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-left: 5px solid var(--neutral); 
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+
+.cartao h2 {
+  border-bottom: none;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  color: var(--neutral);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+
+.cartao .contagem {
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+
+.cartao .cartao-subtitulo {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Personalizando cores dos cartões */
+
+
+.cartao.cartao-livre .contagem {
+  color: var(--accent);
+}
+.cartao.cartao-livre {
+  border-left-color: var(--accent);
+}
+
+
+.cartao.cartao-ocupado .contagem {
+  color: var(--primary);
+}
+.cartao.cartao-ocupado {
+  border-left-color: var(--primary);
+}
+
+
+.cartao.cartao-taxa .contagem {
+  color: var(--neutral);
+}
+
+/*MAPA DE VAGAS*/
+
+
+.mapa-estacionamento {
+  margin-top: 40px;
+}
+
+
+.legenda {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+
+.item-legenda {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+
+.item-legenda span {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+
+.item-legenda .caixa-livre {
+  background-color: var(--accent);
+}
+
+.item-legenda .caixa-ocupada {
+  background-color: var(--primary);
+}
+
+/* Grid de vagas */
+
+.grid-vagas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 15px;
+}
+
+
+.vaga-estacionamento {
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  font-weight: 700;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: default; 
+  border: 2px solid transparent;
+}
+
+
+.vaga-estacionamento:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+.vaga-estacionamento .id-vaga {
+  display: block;
+  font-size: 1.5rem;
+}
+
+.vaga-estacionamento .status-vaga {
+  display: block;
+  font-size: 0.9rem;
+  opacity: 0.8;
+  text-transform: uppercase;
+}
+
+/* ESTADO: LIVRE */
+.vaga-estacionamento.livre {
+  background-color: var(--accent);
+  color: var(--primary); 
+  border-color: #c7c136; 
+}
+
+/* ESTADO: OCUPADO */
+.vaga-estacionamento.ocupada {
+  background-color: var(--primary);
+  color: var(--text-light); 
+  border-color: #606b75; 
+}
+
+
+/*RODAPÉ*/
+footer {
+  background-color: var(--neutral);
+  color: var(--bg-light);
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: 40px;
+}
+
+/* CELULAR*/
+@media (max-width: 768px) {
+  .barra-navegacao {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .links-navegacao {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .cartoes-resumo {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-vagas {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+}

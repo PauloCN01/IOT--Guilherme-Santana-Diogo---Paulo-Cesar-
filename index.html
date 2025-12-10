@@ -1,0 +1,166 @@
+<!-- ...existing code... -->
+<!DOCTYPE html>
+
+<!--Alunos: Guilherme Santana Diogo e Paulo César Nogueira-->
+
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - IOT</title>
+    <link rel="stylesheet" href="./index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Estilos mínimos para cores das vagas -->
+    <style>
+        .vaga-estacionamento {
+            display: inline-block;
+            padding: 12px;
+            border-radius: 6px;
+            color: #222;
+            min-width: 120px;
+            text-align: center;
+            margin: 6px;
+        }
+        .vaga-estacionamento.livre { background: #FFD54F; }    /* amarelo */
+        .vaga-estacionamento.ocupada { background: #BDBDBD; }  /* cinza */
+        .caixa-livre { display:inline-block; width:14px; height:14px; background:#FFD54F; margin-right:6px; border-radius:2px; vertical-align:middle; }
+        .caixa-ocupada { display:inline-block; width:14px; height:14px; background:#BDBDBD; margin-right:6px; border-radius:2px; vertical-align:middle; }
+        /* layout rápido para os cartões */
+        .cartoes-resumo { display:flex; gap:16px; margin-bottom:20px; }
+        .cartao { padding:12px; border-radius:8px; background:#f5f5f5; min-width:140px; }
+        .cartao h2 { margin:0 0 8px 0; font-size:14px; }
+        .cartao .contagem { font-size:20px; font-weight:700; margin:0; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="barra-navegacao">
+            <div class="logo">Controle de Estacionamento</div>
+            <ul class="links-navegacao">
+                <li><a href="index.html" class="ativo">Dashboard</a></li>
+                <li><a href="estatisticas.html">Estatísticas</a></li>
+            </ul>
+            <div class="status-sistema">
+                Sistema: <span>Ligado/Desligado</span>
+            </div>
+        </nav>
+    </header>
+
+    <main class="conteudo">
+        <h1>Visão Geral do Estacionamento</h1>
+
+        <section class="cartoes-resumo">
+            <div class="cartao cartao-livre">
+                <h2>LIVRES</h2>
+                <p class="contagem">0</p>
+                <span class="cartao-subtitulo">Vagas estão disponíveis</span>
+            </div>
+
+            <div class="cartao cartao-ocupado">
+                <h2>OCUPADAS</h2>
+                <p class="contagem">0</p>
+                <span class="cartao-subtitulo">Vagas sendo utilizadas</span>
+            </div>
+
+            <div class="cartao cartao-taxa">
+                <h2>Percentual</h2>
+                <p class="contagem">0%</p>
+                <span class="cartao-subtitulo">Porcentagem de vagas ocupadas</span>
+            </div>
+        </section>
+
+        <section class="mapa-estacionamento">
+            <h2>Mapa das Vagas</h2>
+            
+            <div class="legenda">
+                <div class="item-legenda">
+                    <span class="caixa-livre"></span> Livre
+                </div>
+                <div class="item-legenda">
+                    <span class="caixa-ocupada"></span> Ocupada
+                </div>
+            </div>
+
+            <div class="grid-vagas">
+                <!-- apenas 1 vaga será exibida -->
+                <div class="vaga-estacionamento livre">
+                    <span class="id-vaga">A-01</span>
+                    <span class="status-vaga">Livre</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© Desenvolvido por Guilherme Santana Diogo e Paulo César Nogueira</p>
+    </footer>
+
+    <!-- Script que ajusta URL /teste/valor, contagens e cor da vaga -->
+    <script>
+    (function () {
+        // total de vagas configurado para 1 (aparece apenas 1 por vez)
+        const totalVagas = 1;
+
+        // valor padrão desejado (variável "valor" = 10)
+        const valorPadrao = 1;
+
+        // extrai o segmento "valor" da URL /teste/valor
+        const parts = location.pathname.split('/').filter(Boolean);
+        let valor = valorPadrao;
+        let nOcupadas = 0;
+        if(valor > 5) nOcupadas = 1;
+        if (parts[0] === 'teste' && parts[1]) {
+            const n = parseInt(parts[1], 10);
+            if (!isNaN(n)) valor = n;
+        } else {
+            // força a URL para /teste/10 se não estiver nesse formato
+            const newPath = '/teste/' + valorPadrao;
+            history.replaceState(null, '', newPath);
+        }
+
+        // normaliza valores entre 0 e totalVagas
+        const ocupadas = nOcupadas;
+        const livres = totalVagas - ocupadas;
+        const percentual = Math.round((ocupadas / totalVagas) * 100);
+
+        // atualiza os cartões (ordem: livre, ocupada, percentual)
+        const cartoes = document.querySelectorAll('.cartoes-resumo .cartao .contagem');
+        if (cartoes && cartoes.length >= 3) {
+            cartoes[0].textContent = String(livres);
+            cartoes[1].textContent = String(ocupadas);
+            cartoes[2].textContent = percentual + '%';
+        } else {
+            const livreEl = document.querySelector('.cartao-livre .contagem');
+            const ocupadoEl = document.querySelector('.cartao-ocupado .contagem');
+            const taxaEl = document.querySelector('.cartao-taxa .contagem');
+            if (livreEl) livreEl.textContent = String(livres);
+            if (ocupadoEl) ocupadoEl.textContent = String(ocupadas);
+            if (taxaEl) taxaEl.textContent = percentual + '%';
+        }
+
+        // atualiza a única vaga exibida:
+        // se valor > 5 => cinza (ocupada), caso contrário amarelo (livre)
+        const vaga = document.querySelector('.vaga-estacionamento');
+        if (vaga) {
+            const status = vaga.querySelector('.status-vaga');
+            if (valor > 5) {
+                vaga.classList.remove('livre');
+                vaga.classList.add('ocupada');
+                if (status) status.textContent = 'Ocupada';
+            } else {
+                vaga.classList.remove('ocupada');
+                vaga.classList.add('livre');
+                if (status) status.textContent = 'Livre';
+            }
+        }
+
+    })();
+    </script>
+
+</body>
+</html>
+<!-- ...existing code... -->
